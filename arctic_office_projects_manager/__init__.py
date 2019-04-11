@@ -66,8 +66,15 @@ def create_app(config_name):
     })
 
     # Routes
+    #
+
     @app.route('/')
     def index():
+        # noinspection PyUnresolvedReferences
+        return render_template(f"app/views/index.j2")
+
+    @app.route('/test')
+    def test():
         # noinspection PyUnresolvedReferences
         return render_template(f"app/views/index.j2")
 
