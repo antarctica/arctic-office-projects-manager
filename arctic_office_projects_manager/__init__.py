@@ -70,8 +70,8 @@ def create_app(config_name):
 
     @app.route('/')
     def index():
-        # noinspection PyUnresolvedReferences
-        return render_template(f"app/views/index.j2")
+        app.logger.info('Index method called')
+        return 'testing'
 
     @app.route('/test')
     def test():
