@@ -22,7 +22,6 @@ resource "heroku_app" "bas-arctic-office-projects-app-stage" {
   region = "eu"
 
   config_vars {
-    REVERSE_PROXY_PATH             = "/"
     AZURE_OAUTH_TENANCY            = "x"
     AZURE_OAUTH_APPLICATION_ID     = "x"
     AZURE_OAUTH_APPLICATION_SECRET = "X"
@@ -40,7 +39,6 @@ resource "heroku_app" "bas-arctic-office-projects-app-stage" {
 #   region = "eu"
 
 #   config_vars {
-#     REVERSE_PROXY_PATH             = "/"
 #     AZURE_OAUTH_TENANCY            = "x"
 #     AZURE_OAUTH_APPLICATION_ID     = "x"
 #     AZURE_OAUTH_APPLICATION_SECRET = "X"
