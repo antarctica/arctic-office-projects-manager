@@ -24,11 +24,6 @@
 
 # == Global settings ==
 
-services:
-  -
-    name: postgres:11.1-alpine
-    alias: app-db
-
 stages:
   - test
   - lint

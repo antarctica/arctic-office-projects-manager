@@ -6,8 +6,4 @@ ignore:
     - '*':
         reason: 'Required by other dependency, no known resolution'
         expires: 2019-10-28T00:00:00.000Z
-  SNYK-PYTHON-SQLALCHEMY-173678:
-    - '*':
-        reason: 'No released fix version yet'
-        expires: 2019-03-15T00:00:00.000Z
 patch: {}
