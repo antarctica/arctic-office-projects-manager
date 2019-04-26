@@ -1,5 +1,5 @@
 bandit==1.5.1
-bas-style-kit-jinja-templates==0.1.0
+bas-style-kit-jinja-templates==0.2.0
 Faker==1.0.4
 flake8==3.7.7
 Flask==1.0.2

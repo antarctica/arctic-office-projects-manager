@@ -4,7 +4,7 @@ import sentry_sdk
 
 from http import HTTPStatus
 
-from flask import Flask, request, has_request_context, render_template
+from flask import Flask, request, has_request_context, render_template, redirect, url_for
 from flask.logging import default_handler
 # noinspection PyPackageRequirements
 from jinja2 import PrefixLoader, PackageLoader
@@ -60,6 +60,10 @@ def create_app(config_name):
     app.config['bsk_templates'].site_description = 'Management application for projects in the NERC Arctic Office ' \
                                                    'Projects Database'
     app.config['bsk_templates'].bsk_site_feedback_href = 'mailto:webapps@bas.ac.uk'
+    app.config['bsk_templates'].bsk_site_nav_primary.append({
+        'title': 'Projects',
+        'href': '/projects'
+    })
     app.config['bsk_templates'].bsk_site_nav_launcher.append({
         'title': 'Arctic Office Website',
         'href': 'https://www.arctic.ac.uk'
@@ -70,8 +74,12 @@ def create_app(config_name):
 
     @app.route('/')
     def index():
+        return redirect(url_for('projects_index'))
+
+    @app.route('/projects')
+    def projects_index():
         # noinspection PyUnresolvedReferences
-        return render_template(f"app/views/index.j2")
+        return render_template(f"app/views/projects_index.j2")
 
     @app.route('/meta/health/canary', methods=['get', 'options'])
     def meta_healthcheck_canary():
