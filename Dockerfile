@@ -11,7 +11,9 @@ ENV FLASK_ENV development
 
 # Setup project dependencies
 COPY requirements.txt /usr/src/app/
-RUN pip install --upgrade pip && \
+
+RUN apk add --no-cache git && \
+    pip install --upgrade pip && \
     pip install -r requirements.txt --no-cache-dir
 
 # Setup runtime

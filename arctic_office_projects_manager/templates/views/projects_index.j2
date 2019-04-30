@@ -1,4 +1,24 @@
 {% extends "app/layouts/app.j2" %}
 {% block main_content %}
     <h1 class="bsk-page-header">Projects</h1>
+
+    <section>
+        <header>
+            <h2>List of projects</h2>
+        </header>
+        <table class="bsk-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in projects.resources %}
+                <tr>
+                    <td>{{ project.title }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
 {% endblock %}

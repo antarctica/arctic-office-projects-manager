@@ -8,6 +8,9 @@ from flask import Flask, request, has_request_context, render_template, redirect
 from flask.logging import default_handler
 # noinspection PyPackageRequirements
 from jinja2 import PrefixLoader, PackageLoader
+from oauthlib.oauth2 import BackendApplicationClient
+from requests_oauthlib import OAuth2Session
+from jsonapi_client import Session
 
 from flask_reverse_proxy_fix.middleware import ReverseProxyPrefixFix
 from flask_request_id_header.middleware import RequestID
@@ -22,14 +25,6 @@ def create_app(config_name):
     # Config
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
-
-    # Middleware / Wrappers
-    if app.config['APP_ENABLE_PROXY_FIX']:
-        ReverseProxyPrefixFix(app)
-    if app.config['APP_ENABLE_REQUEST_ID']:
-        RequestID(app)
-    if app.config['APP_ENABLE_SENTRY']:
-        sentry_sdk.init(**app.config['SENTRY_CONFIG'])
 
     # Logging
     class RequestFormatter(logging.Formatter):
@@ -48,6 +43,27 @@ def create_app(config_name):
     )
     default_handler.setFormatter(formatter)
     default_handler.setLevel(app.config['LOGGING_LEVEL'])
+
+    # Middleware / Wrappers
+    if app.config['APP_ENABLE_PROXY_FIX']:
+        ReverseProxyPrefixFix(app)
+    if app.config['APP_ENABLE_REQUEST_ID']:
+        RequestID(app)
+    if app.config['APP_ENABLE_SENTRY']:
+        sentry_sdk.init(**app.config['SENTRY_CONFIG'])
+
+    # API client
+    arctic_projects_api_auth = BackendApplicationClient(client_id=app.config['AZURE_OAUTH_APPLICATION_ID'])
+    arctic_projects_api_auth_session = OAuth2Session(client=arctic_projects_api_auth)
+    arctic_projects_api_auth_token = arctic_projects_api_auth_session.fetch_token(
+        token_url=app.config['AZURE_OAUTH_TOKEN_URL'],
+        client_id=app.config['AZURE_OAUTH_APPLICATION_ID'],
+        client_secret=app.config['AZURE_OAUTH_APPLICATION_SECRET'],
+        scope=app.config['AZURE_OAUTH_NERC_ARCTIC_OFFICE_SCOPES']
+    )
+    arctic_projects_api = Session(
+        'https://api.bas.ac.uk/arctic-office-projects/testing',
+        request_kwargs={'headers': {'authorization': f"bearer {arctic_projects_api_auth_token['access_token']}"}})
 
     # Templates
     app.jinja_loader = PrefixLoader({
@@ -78,8 +94,9 @@ def create_app(config_name):
 
     @app.route('/projects')
     def projects_index():
+        projects = arctic_projects_api.get('projects')
         # noinspection PyUnresolvedReferences
-        return render_template(f"app/views/projects_index.j2")
+        return render_template(f"app/views/projects_index.j2", projects=projects)
 
     @app.route('/meta/health/canary', methods=['get', 'options'])
     def meta_healthcheck_canary():
