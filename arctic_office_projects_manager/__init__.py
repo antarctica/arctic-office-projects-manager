@@ -71,6 +71,7 @@ def create_app(config_name):
         'bas_style_kit': PackageLoader('bas_style_kit_jinja_templates'),
     })
     app.config['bsk_templates'] = BskTemplates()
+    app.config['bsk_templates'].site_styles.append({'href': '/static/css/app.css'})
     app.config['bsk_templates'].site_title = 'NERC Arctic Office Projects Manager'
     app.config['bsk_templates'].bsk_site_nav_brand_text = 'NERC Arctic Office Projects Manager'
     app.config['bsk_templates'].site_description = 'Management application for projects in the NERC Arctic Office ' \
