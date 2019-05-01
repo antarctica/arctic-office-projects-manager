@@ -98,6 +98,12 @@ def create_app(config_name):
         # noinspection PyUnresolvedReferences
         return render_template(f"app/views/projects_index.j2", projects=projects)
 
+    @app.route('/projects/<project_id>')
+    def project_details(project_id: str):
+        project = arctic_projects_api.get('projects', project_id)
+        # noinspection PyUnresolvedReferences
+        return render_template(f"app/views/project_details.j2", project=project)
+
     @app.route('/meta/health/canary', methods=['get', 'options'])
     def meta_healthcheck_canary():
         """
