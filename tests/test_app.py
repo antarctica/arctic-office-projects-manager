@@ -7,7 +7,6 @@ from flask import current_app
 from tests.base_test import BaseTestCase
 
 
-@unittest.skip('Skipped until projects API can be mocked')
 class AppTestCase(BaseTestCase):
     def test_app_exists(self):
         self.assertFalse(current_app is None)
@@ -15,6 +14,7 @@ class AppTestCase(BaseTestCase):
     def test_app_is_testing(self):
         self.assertTrue(current_app.config['TESTING'])
 
+    @unittest.skip('Skipped until projects API can be mocked')
     def test_route_index(self):
         response = self.client.get(
             '/',

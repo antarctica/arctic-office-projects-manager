@@ -53,17 +53,18 @@ def create_app(config_name):
         sentry_sdk.init(**app.config['SENTRY_CONFIG'])
 
     # API client
-    arctic_projects_api_auth = BackendApplicationClient(client_id=app.config['AZURE_OAUTH_APPLICATION_ID'])
-    arctic_projects_api_auth_session = OAuth2Session(client=arctic_projects_api_auth)
-    arctic_projects_api_auth_token = arctic_projects_api_auth_session.fetch_token(
-        token_url=app.config['AZURE_OAUTH_TOKEN_URL'],
-        client_id=app.config['AZURE_OAUTH_APPLICATION_ID'],
-        client_secret=app.config['AZURE_OAUTH_APPLICATION_SECRET'],
-        scope=app.config['AZURE_OAUTH_NERC_ARCTIC_OFFICE_SCOPES']
-    )
-    arctic_projects_api = Session(
-        'https://api.bas.ac.uk/arctic-office-projects/testing',
-        request_kwargs={'headers': {'authorization': f"bearer {arctic_projects_api_auth_token['access_token']}"}})
+    if not app.config['TESTING']:
+        arctic_projects_api_auth = BackendApplicationClient(client_id=app.config['AZURE_OAUTH_APPLICATION_ID'])
+        arctic_projects_api_auth_session = OAuth2Session(client=arctic_projects_api_auth)
+        arctic_projects_api_auth_token = arctic_projects_api_auth_session.fetch_token(
+            token_url=app.config['AZURE_OAUTH_TOKEN_URL'],
+            client_id=app.config['AZURE_OAUTH_APPLICATION_ID'],
+            client_secret=app.config['AZURE_OAUTH_APPLICATION_SECRET'],
+            scope=app.config['AZURE_OAUTH_NERC_ARCTIC_OFFICE_SCOPES']
+        )
+        arctic_projects_api = Session(
+            'https://api.bas.ac.uk/arctic-office-projects/testing',
+            request_kwargs={'headers': {'authorization': f"bearer {arctic_projects_api_auth_token['access_token']}"}})
 
     # Templates
     app.jinja_loader = PrefixLoader({
