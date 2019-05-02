@@ -1,0 +1,23 @@
+{% extends "app/layouts/app.j2" %}
+{% block main_content %}
+    <header class="bsk-page-header x-page-header">
+        <h1>Projects</h1>
+    </header>
+
+    <section>
+        <table class="bsk-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in projects.resources %}
+                <tr>
+                    <td><a href="{{ url_for('project_details', project_id=project.id) }}">{{ project.title }}</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock %}

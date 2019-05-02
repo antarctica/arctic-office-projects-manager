@@ -37,6 +37,8 @@ class Config(object):
     AZURE_OAUTH_TENANCY = os.getenv('AZURE_OAUTH_TENANCY') or None
     AZURE_OAUTH_APPLICATION_ID = os.getenv('AZURE_OAUTH_APPLICATION_ID') or None
     AZURE_OAUTH_APPLICATION_SECRET = os.getenv('AZURE_OAUTH_APPLICATION_SECRET')
+    AZURE_OAUTH_NERC_ARCTIC_OFFICE_SCOPES = str(os.getenv('AZURE_OAUTH_NERC_ARCTIC_OFFICE_SCOPES') or '').split(',') or []
+    AZURE_OAUTH_TOKEN_URL = f"https://login.microsoftonline.com/{ AZURE_OAUTH_TENANCY }/oauth2/v2.0/token"
 
     SENTRY_CONFIG = {
         'integrations': [FlaskIntegration()],

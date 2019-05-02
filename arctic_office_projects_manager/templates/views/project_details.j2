@@ -1,0 +1,52 @@
+{% extends "app/layouts/app.j2" %}
+{% block main_content %}
+    <header class="bsk-page-header x-page-header">
+        <h1>
+            <small>Project</small>
+            <br />
+            {{ project.resource.title }}
+            {% if project.resource.acronym %}({{ project.resource.acronym }}){% endif %}
+        </h1>
+    </header>
+    <dl class="bsk-dl-lg bsk-dl-striped bsk-dl-horizontal">
+        <dt>Project ID</dt>
+            <dd>{{ project.resource.id }}</dd>
+        <dt>Access Duration</dt>
+            <dd>
+                {{ project.resource['access-duration']['start-instant'] }}
+                <span class="bsk-text-muted">-</span>
+                {{ project.resource['access-duration']['end-instant'] }}
+            </dd>
+    </dl>
+    <hr />
+    <dl class="bsk-dl-lg bsk-dl-striped bsk-dl-horizontal">
+        <dt>Title</dt>
+            <dd>{{ project.resource.title }}</dd>
+        <dt>Acronym</dt>
+            <dd>{{ project.resource.acronym }}</dd>
+        <dt>Abstract</dt>
+            <dd>{{ project.resource.abstract }}</dd>
+        <dt>Country</dt>
+            <dd>
+                <code>{{ project.resource.country['iso-3166-alpha3-code'] }}</code>
+                <span class="bsk-text-muted">-</span>
+                {{ project.resource.country.name }}
+            </dd>
+        <dt>Duration</dt>
+            <dd>
+                {{ project.resource['project-duration']['start-instant'] }}
+                <span class="bsk-text-muted">-</span>
+                {{ project.resource['project-duration']['end-instant'] }}
+            </dd>
+        <dt>Website</dt>
+            <dd><a href="{{ project.resource.website }}">{{ project.resource.website }}</a></dd>
+        <dt>Publications</dt>
+            <dd>
+                <ul class="bsk-list-unstyled">
+                    {% for publication in project.resource.publications %}
+                        <li><a href="{{ publication }}">{{ publication }}</a>{% if not loop.last %}<span class="bsk-text-muted">,</span>{% endif %}</li>
+                    {% endfor %}
+                </ul>
+            </dd>
+    </dl>
+{% endblock %}
