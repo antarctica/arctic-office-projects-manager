@@ -22,9 +22,9 @@ resource "heroku_app" "bas-arctic-office-projects-app-stage" {
   region = "eu"
 
   config_vars {
-    AZURE_OAUTH_TENANCY            = "x"
-    AZURE_OAUTH_APPLICATION_ID     = "x"
-    AZURE_OAUTH_APPLICATION_SECRET = "X"
+    AZURE_OAUTH_TENANCY                   = "d14c529b-5558-4a80-93b6-7655681e55d6"
+    AZURE_OAUTH_APPLICATION_ID            = "9657cd94-0a8d-4e8b-b134-3d695e2bdc5f"
+    AZURE_OAUTH_NERC_ARCTIC_OFFICE_SCOPES = "api://2b3f5c55-1a7d-4e26-a9a7-5b56b0f612f1/.default"
   }
 }
 
@@ -39,9 +39,9 @@ resource "heroku_app" "bas-arctic-office-projects-app-stage" {
 #   region = "eu"
 
 #   config_vars {
-#     AZURE_OAUTH_TENANCY            = "x"
-#     AZURE_OAUTH_APPLICATION_ID     = "x"
-#     AZURE_OAUTH_APPLICATION_SECRET = "X"
+#     AZURE_OAUTH_TENANCY                      = "x"
+#     AZURE_OAUTH_APPLICATION_ID               = "x"
+#    AZURE_OAUTH_NERC_ARCTIC_OFFICE_SCOPES     = "X"
 #   }
 # }
 

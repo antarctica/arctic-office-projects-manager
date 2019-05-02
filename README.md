@@ -65,6 +65,8 @@ $ docker-compose run app flask
 
 #### Local development - auth
 
+This application needs to be registered as a service, and as a client of other services.
+
 See 
 [these instructions](https://gitlab.data.bas.ac.uk/web-apps/flask-extensions/flask-azure-oauth#registering-an-application-in-azure)
 for how to register the application as a service.
@@ -85,8 +87,11 @@ provider for Terraform.
 **Note:** This describes how to register this API itself as a *service*, see the 
 [Registering API clients](#registering-api-clients) section for how to register a *client* of this API.
 
-Set the `AZURE_OAUTH_TENANCY`, `AZURE_OAUTH_APPLICATION_ID` and `AZURE_OAUTH_CLIENT_APPLICATION_IDS` options in the 
+Set the `AZURE_OAUTH_TENANCY`, `AZURE_OAUTH_APPLICATION_ID` and `AZURE_OAUTH_NERC_ARCTIC_OFFICE_SCOPES` options in the 
 local `.env` file.
+
+See [these steps](https://gitlab.data.bas.ac.uk/web-apps/arctic-office-projects-api#registering-api-clients) for 
+registering the application for this service as a client of the Arctic Office Projects API.
 
 [1] Application roles for the BAS NERC Arctic Office Projects Manager:
 
@@ -126,9 +131,10 @@ Once running, add the appropriate configuration to the BAS General Load Balancer
 Config vars should be set [manually](https://dashboard.heroku.com/apps/bas-arctic-projects-app-stage/settings) for 
 sensitive settings. Other config vars should be set in Terraform.
 
-| Config Var    | Config Value                        | Description                                         |
-| ------------- | ----------------------------------- | --------------------------------------------------- |
-| `SENTRY_DSN`  | *Available from Sentry*             | Identifier for application in Sentry error tracking |
+| Config Var                       | Config Value                        | Description                                         |
+| -------------------------------- | ----------------------------------- | --------------------------------------------------- |
+| `AZURE_OAUTH_APPLICATION_SECRET` | *Available from Azure Portal*       | Application OAuth secret                            |
+| `SENTRY_DSN`                     | *Available from Sentry*             | Identifier for application in Sentry error tracking |
 
 #### Staging - auth
 
@@ -152,9 +158,10 @@ See the [Heroku sub-section in the staging section](#staging-heroku) for general
 Config vars should be set [manually](https://dashboard.heroku.com/apps/bas-arctic-projects-app-prod/settings) for 
 sensitive settings. Other config vars should be set in Terraform.
 
-| Config Var    | Config Value                        | Description                                         |
-| ------------- | ----------------------------------- | --------------------------------------------------- |
-| `SENTRY_DSN`  | *Available from Sentry*             | Identifier for application in Sentry error tracking |
+| Config Var                       | Config Value                        | Description                                         |
+| -------------------------------- | ----------------------------------- | --------------------------------------------------- |
+| `AZURE_OAUTH_APPLICATION_SECRET` | *Available from Azure Portal*       | Application OAuth secret                            |
+| `SENTRY_DSN`                     | *Available from Sentry*             | Identifier for application in Sentry error tracking |
 
 #### Production - auth
 
