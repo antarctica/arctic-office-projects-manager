@@ -79,11 +79,11 @@ def create_app(config_name):
                                                    'Projects Database'
     app.config['bsk_templates'].bsk_site_feedback_href = 'mailto:webapps@bas.ac.uk'
     app.config['bsk_templates'].bsk_site_nav_primary.append({
-        'title': 'Projects',
+        'value': 'Projects',
         'href': '/projects'
     })
     app.config['bsk_templates'].bsk_site_nav_launcher.append({
-        'title': 'Arctic Office Website',
+        'value': 'Arctic Office Website',
         'href': 'https://www.arctic.ac.uk'
     })
 
@@ -104,7 +104,7 @@ def create_app(config_name):
     def project_details(project_id: str):
         project = arctic_projects_api.get('projects', project_id)
         # noinspection PyUnresolvedReferences
-        return render_template(f"app/views/project_details.j2", project=project)
+        return render_template(f"app/views/project_details.j2", project=project, active_nav_item='/projects')
 
     @app.route('/meta/health/canary', methods=['get', 'options'])
     def meta_healthcheck_canary():
