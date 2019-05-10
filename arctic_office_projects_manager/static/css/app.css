@@ -1,3 +1,89 @@
 .x-page-header {
-    margin-bottom: 70px;
+    margin-bottom: 64px;
+}
+
+.x-orcid {
+  color: #A6CE39;
+  font-size: 110%;
+}
+
+.x-doi {
+  color: #F2B649;
+  font-size: 110%;
+}
+
+.x-sp-md {
+  margin-bottom: 32px;
+}
+.x-sp-lg {
+  margin-bottom: 64px;
+}
+
+/*
+Mermaid styles
+To be replaced by Mermaid support in a future version of the BAS Style Kit
+//
+*/
+
+/* Base */
+
+.mermaid {
+  text-align: center;
+}
+
+.mermaid .label {
+  color: #333;
+}
+
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon {
+  fill: #EEEEEE;
+}
+
+.mermaid .edgePath .path {
+  stroke: #777777;
+}
+
+/* Actors */
+
+.mermaid .actor {
+  stroke: #EEEEEE;
+  fill: #EEEEEE;
+}
+
+.mermaid text.actor {
+  fill: black;
+  stroke: none;
+}
+
+.mermaid .actor-line {
+  stroke: #777777;
+}
+
+/* Arrows */
+
+.mermaid .arrowheadPath {
+  stroke: #777777;
+  fill: #777777;
+}
+
+.mermaid #arrowhead {
+  fill: #777777;
+}
+
+.mermaid #crosshead path {
+  fill: #777777 !important;
+  stroke: #777777 !important;
+}
+
+
+/* Custom mermaid styles */
+.mermaid .x-active-node > rect {
+  fill: #2B8CC4;
+  stroke: #2B8CC4;
+}
+.mermaid .x-active-node > .label {
+  color: #FFFFFF;
 }

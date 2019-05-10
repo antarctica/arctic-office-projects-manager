@@ -72,6 +72,12 @@ def create_app(config_name):
         'bas_style_kit': PackageLoader('bas_style_kit_jinja_templates'),
     })
     app.config['bsk_templates'] = BskTemplates()
+    app.config['bsk_templates'].site_styles.append({
+        'href': 'https://cdn.web.bas.ac.uk/libs/font-awesome-pro/5.3.1/css/all.min.css'
+    })
+    app.config['bsk_templates'].site_styles.append({
+        'href': 'https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css'
+    })
     app.config['bsk_templates'].site_styles.append({'href': '/static/css/app.css'})
     app.config['bsk_templates'].site_title = 'NERC Arctic Office Projects Manager'
     app.config['bsk_templates'].bsk_site_nav_brand_text = 'NERC Arctic Office Projects Manager'
@@ -103,6 +109,15 @@ def create_app(config_name):
     @app.route('/projects/<project_id>')
     def project_details(project_id: str):
         project = arctic_projects_api.get('projects', project_id)
+
+        mermaid_asset = False
+        for style in app.config['bsk_templates'].site_scripts:
+            if style['href'] == 'https://unpkg.com/mermaid@8.0.0/dist/mermaid.min.js':
+                mermaid_asset = True
+        if not mermaid_asset:
+            app.config['bsk_templates'].site_scripts.append({
+                'href': 'https://unpkg.com/mermaid@8.0.0/dist/mermaid.min.js'
+            })
         # noinspection PyUnresolvedReferences
         return render_template(f"app/views/project_details.j2", project=project, active_nav_item='/projects')
 
