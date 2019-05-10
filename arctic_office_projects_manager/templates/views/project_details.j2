@@ -8,7 +8,8 @@
             {% if project.resource.acronym %}({{ project.resource.acronym }}){% endif %}
         </h1>
     </header>
-    <dl class="bsk-dl-lg bsk-dl-striped bsk-dl-horizontal">
+    <section>
+        <dl class="bsk-dl-lg bsk-dl-striped bsk-dl-horizontal">
         <dt>Project ID</dt>
             <dd>{{ project.resource.id }}</dd>
         <dt>Access Duration</dt>
@@ -18,8 +19,10 @@
                 {{ project.resource['access-duration']['end-instant'] }}
             </dd>
     </dl>
+    </section>
     <hr />
-    <dl class="bsk-dl-lg bsk-dl-striped bsk-dl-horizontal">
+    <section>
+        <dl class="bsk-dl-lg bsk-dl-striped bsk-dl-horizontal">
         <dt>Title</dt>
             <dd>{{ project.resource.title }}</dd>
         <dt>Acronym</dt>
@@ -39,14 +42,132 @@
                 {{ project.resource['project-duration']['end-instant'] }}
             </dd>
         <dt>Website</dt>
-            <dd><a href="{{ project.resource.website }}">{{ project.resource.website }}</a></dd>
+            <dd>
+                <a href="{{ project.resource.website }}">
+                    {{ project.resource.website }}
+                    <sup><i class="far fa-external-link"></i></sup>
+                </a>
+            </dd>
         <dt>Publications</dt>
             <dd>
                 <ul class="bsk-list-unstyled">
                     {% for publication in project.resource.publications %}
-                        <li><a href="{{ publication }}">{{ publication }}</a>{% if not loop.last %}<span class="bsk-text-muted">,</span>{% endif %}</li>
+                        <li>
+                            <a href="{{ publication }}">
+                                <i class="ai ai-fw ai-doi x-doi"></i>
+                                {{ publication }}
+                                <sup><i class="far fa-external-link"></i></sup>
+                            </a>
+                        </li>
                     {% endfor %}
                 </ul>
             </dd>
     </dl>
+    </section>
+    <section>
+        <h2 class="x-sp-md">Relationships</h2>
+        <section>
+            <div id="resource-graph" class="bsk-mermaid mermaid">
+                graph LR
+                    {{ project.resource.id }}[{% if project.resource.acronym %}{{ project.resource.acronym }}{% else %}{{ project.resource.title }}{% endif %}]
+                    class {{ project.resource.id }} x-active-node
+                {% if project.resource.allocations %}
+                    {% for allocation in project.resource.allocations %}
+                        {% if allocation.grant is defined %}
+                            {{ allocation.grant.id }}[{% if allocation.grant.reference is defined %}{{ allocation.grant.reference }}{% endif %}]
+                            click {{ allocation.grant.id }} "#"
+                            {{ project.resource.id }}-->{{ allocation.grant.id }}
+                            {% if allocation.grant.funder is defined %}
+                                {{ allocation.grant.funder.id }}[{% if allocation.grant.funder.acronym %}{{ allocation.grant.funder.acronym }}{% else %}{{ allocation.grant.funder.name }}{% endif %}]
+                                click {{ allocation.grant.funder.id }} "#"
+                                {{ allocation.grant.id }}-->{{ allocation.grant.funder.id }}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if project.resource.participants %}
+                    {% for participant in project.resource.participants %}
+                        {% if participant.person is defined %}
+                            {{ participant.person.id }}[{{ participant.person['first-name'] | capitalize }} {{ participant.person['last-name'] | capitalize }} {% if participant.role is defined %}<br /><em>{{ participant.role.title | capitalize }}</em>{% endif %}]
+                            click {{ participant.person.id }} "#"
+                            {{ project.resource.id }}-->{{ participant.person.id }}
+                            {% if participant.person.organisation is defined %}
+                                {{ participant.person.organisation.id }}[{% if participant.person.organisation.acronym %}{{ participant.person.organisation.acronym }}{% else %}{{ participant.person.organisation.name }}{% endif %}]
+                                click {{ participant.person.organisation.id }} "#"
+                                {{ participant.person.id }}-->{{ participant.person.organisation.id }}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </section>
+        {% if project.resource.participants %}
+            <section class="x-sp-lg">
+                <h3>Participants (People)</h3>
+                <table class="bsk-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>ORCiD</th>
+                            <th>Role</th>
+                            <th>Organisation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for participant in project.resource.participants %}
+                            {% if participant.person is defined %}
+                                <tr>
+                                    <td><a href="#">{{ participant.person['first-name'] | capitalize }} {{ participant.person['last-name'] | capitalize }}</a></td>
+                                    <td>
+                                        <a href="{{ participant.person['orcid-id'] }}">
+                                            <i class="ai ai-fw ai-orcid x-orcid"></i>
+                                            {{ participant.person['orcid-id'] | replace('https://sandbox.orcid.org/', '') | replace('https://orcid.org/', '') }}
+                                            <sup><i class="far fa-external-link"></i></sup>
+                                        </a>
+                                    </td>
+                                    <td>{% if participant.role is defined %}{{ participant.role.title | capitalize }}{% endif %}</td>
+                                    <td>{% if participant.person.organisation is defined %}<a href="#">{% if participant.person.organisation.acronym %}{{ participant.person.organisation.acronym }}{% else %}{{ participant.person.organisation.name }}{% endif %}</a>{% endif %}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        {% endif %}
+        {% if project.resource.allocations %}
+            <section>
+                <h3>Allocations (Grants)</h3>
+                <table class="bsk-table">
+                    <thead>
+                        <tr>
+                            <th>Grant Reference</th>
+                            <th>Title</th>
+                            <th>Funder</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for allocation in project.resource.allocations %}
+                            {% if allocation.grant is defined %}
+                                <tr>
+                                    <td><a href="#">{{ allocation.grant.reference }}</a></td>
+                                    <td>{{ allocation.grant.title }}</td>
+                                    <td>{% if allocation.grant.funder is defined %}<a href="#">{% if allocation.grant.funder.acronym %}{{ allocation.grant.funder.acronym }}{% else %}{{ allocation.grant.funder.name }}{% endif %}</a>{% endif %}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        {% endif %}
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        mermaid.initialize({
+            startOnLoad:true,
+            theme: null
+        });
+    </script>
 {% endblock %}
